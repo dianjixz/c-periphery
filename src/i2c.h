@@ -44,6 +44,30 @@ int i2c_tostring(i2c_t *i2c, char *str, size_t len);
 int i2c_errno(i2c_t *i2c);
 const char *i2c_errmsg(i2c_t *i2c);
 
+
+/* I2C internal address max length */
+#define INT_ADDR_MAX_BYTES 4
+
+/* I2C page max bytes */
+#define PAGE_MAX_BYTES 4096
+
+#define GET_I2C_DELAY(delay) (delay)
+#define GET_I2C_FLAGS(tenbit, flags) ((tenbit) ? ((flags) | I2C_M_TEN) : (flags))
+#define GET_WRITE_SIZE(addr, remain, page_bytes) ((addr) + (remain) > (page_bytes) ? (page_bytes) - (addr) : remain)
+
+
+/* I2c ioctl read, write can set i2c flags */
+int i2c_ioctl_read(i2c_t *i2c, unsigned int iaddr, void *buf, size_t len);
+int i2c_ioctl_write(i2c_t *i2c, unsigned int iaddr, const void *buf, size_t len);
+
+/* I2C file I/O read, write */
+int i2c_read(i2c_t *i2c, unsigned int iaddr, void *buf, size_t len);
+int i2c_write(i2c_t *i2c, unsigned int iaddr, const void *buf, size_t len);
+
+/* I2c primitive read, write can set i2c flags */
+int i2c_primitive_read(i2c_t *i2c, void *offset, size_t offset_len, void *buf, size_t buf_len);
+int i2c_primitive_write(i2c_t *i2c, void *offset, size_t offset_len, void *buf, size_t buf_len);
+
 /* struct i2c_msg from <linux/i2c.h>:
 
     struct i2c_msg {
